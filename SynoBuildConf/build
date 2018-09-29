@@ -1,0 +1,14 @@
+#!/bin/bash
+
+touch /logs/phpvirtualbox.build
+
+# if env MakeClean is set to yes clean
+case ${MakeClean} in
+	[Yy][Ee][Ss])
+	;;
+esac
+
+# url links and file names
+. ./.config
+
+touch  /logs/phpvirtualbox.build

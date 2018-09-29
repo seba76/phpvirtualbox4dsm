@@ -1,0 +1,53 @@
+#!/bin/sh
+
+PACKAGE=phpvirtualbox4dsm
+PACKAGE_DIR="/var/packages/${PACKAGE}"
+
+start()
+{
+  exit 0
+}
+
+stop()
+{
+  exit 0
+}
+
+case $1 in
+   	start)
+		# check enabled
+		if [ ! -f "${PACKAGE_DIR}/enabled" ]; then
+			exit 0;
+		fi
+
+		# start routine
+		start
+		exit 0
+        ;;
+   	stop)
+		stop
+        	exit 0
+        ;;
+	restart)
+		stop && start
+	;;
+  	status)
+		if [ -f "${PACKAGE_DIR}/enabled" ]; then
+			exit 0
+		else
+			exit 1
+		fi
+        ;;
+	killall)
+		stop
+		exit 0
+        ;;
+	log)
+		echo ""
+        	exit 0
+        ;;
+    	*)
+		echo "Usage: start-stop-status.sh start|stop|restart|status|killall|log"
+        	exit 1
+        ;;
+esac

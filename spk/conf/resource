@@ -1,0 +1,14 @@
+{
+	"php": {
+		"php-ini": [{
+				"relpath": "etc/virtualbox.php.ini"
+			}
+		]
+	},
+	"nginx": {
+		"conf.d": [{
+				"relpath": "etc/virtualbox.conf"
+			}
+		]
+	}
+}

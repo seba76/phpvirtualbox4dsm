@@ -1,0 +1,86 @@
+#!/bin/sh
+
+# Package
+PACKAGE="phpvirtualbox4dsm"
+
+# some variables
+WEB_DIR="/var/services/web/"
+PACKAGE_DIR="/var/packages/${PACKAGE}"
+VBOX_USER=root
+USER=${USER}
+
+# wizard variables
+PHPVBOX_NOAUTH=$([ "${wizard_no_auth}" == "true" ] && echo "true" || echo "false")
+PHPVBOX_ICONS=$([ "${wizard_enable_custom_icons}" == "true" ] && echo "true" || echo "false")
+PHPVBOX_ADVANCEDCONFIG=$([ "${wizard_enable_advanced_config}" == "true" ] && echo "true" || echo "false")
+PHPVBOX_STARTSTOPCONFIG=$([ "${wizard_start_stop_config}" == "true" ] && echo "true" || echo "false")
+PHPVBOX_LNG=$([ "${wizard_language_ger}" == "true" ] && echo "de" || echo "en")
+PHPVBOX_KBD=$([ "${wizard_keyboard_layout_ger}" == "true" ] && echo "DE" || echo "EN")
+WEBSVC_PASS="${wizard_use_vboxwebsvc_pass}"
+WEBSVC_URL="${wizard_vboxsvcdomain}"
+
+preinst ()
+{
+	exit 0
+}
+
+postinst ()
+{	
+	# Install the phpVirtualBox onto web station
+	mkdir -p ${WEB_DIR}/${PACKAGE}
+	cp -pR ${PACKAGE_DIR}/target/www/phpvirtualbox4dsm ${WEB_DIR}/
+
+	if [ $? -ne 0 ]; then
+		echo "Unable to install phpwirtualbox4dsm"
+		exit 1
+	fi 
+
+	# Create a default configuration file for phpVirtualBox
+	CONFIG_PHP="${WEB_DIR}/${PACKAGE}/config.php" 
+	if [ ! -f "${CONFIG_PHP}" ]; then
+		cp "${PACKAGE_DIR}/target/www/config.php.synology" "${CONFIG_PHP}"
+		sed -i -e "s|@user@|${VBOX_USER:=}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@pass@|${WEBSVC_PASS:=}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@location@|${WEBSVC_URL:=}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@noAuth@|${PHPVBOX_NOAUTH:=true}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@enableAdvancedConfig@|${PHPVBOX_ADVANCEDCONFIG:=true}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@startStopConfig@|${PHPVBOX_STARTSTOPCONFIG:=true}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@enableCustomIcons@|${PHPVBOX_ICONS:=true}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@lng@|${PHPVBOX_LNG:=en}|g" "${CONFIG_PHP}"
+		sed -i -e "s|@kbd@|${PHPVBOX_KBD:=EN}|g" "${CONFIG_PHP}"
+		chmod ga+w "${CONFIG_PHP}"
+	fi
+
+	exit 0
+}
+
+preuninst ()
+{
+    exit 0
+}
+
+postuninst ()
+{	
+	[ -d ${WEB_DIR}/phpvirtualbox4dsm ] && rm -rf ${WEB_DIR}/phpvirtualbox4dsm
+    exit 0
+}
+
+preupgrade ()
+{
+	exit 0
+}
+
+postupgrade ()
+{
+   	exit 0
+}
+
+set_key_value() {
+	xfile="$1"
+	param="$2"
+	value="$3"
+	grep -q "${param}" ${xfile} && \
+		/bin/sed -i "s/^${param}.*/${param}=\"${value}\"/" ${xfile} || \
+		echo "${param}=\"${value}\"" >> ${xfile}
+}
+
