@@ -1,0 +1,53 @@
+#!/bin/sh
+
+/bin/cat > /tmp/wizard.php <<'EOF'
+<?php
+$ini_array = parse_ini_file("/etc.defaults/synoinfo.conf");
+$unique=$ini_array["unique"];
+echo  <<<EOF
+[{
+    "step_title": "Step 1",
+    "items": [{
+        "type": "textfield",
+        "desc": "model name",
+        "subitems": [{
+            "key": "pkgwizard_db_name",
+            "desc": "name",
+            "defaultValue":"$unique"
+        }]
+    }, {
+        "type": "combobox",
+        "desc": "Please select a volume",
+        "subitems": [{
+            "key": "volume",
+            "desc": "volume name",
+            "displayField": "display_name",
+            "valueField": "volume_path",
+            "editable": false,
+            "mode": "remote",
+            "api_store": {
+                "api": "SYNO.Core.Storage.Volume",
+                "method": "list",
+                "version": 1,
+                "baseParams": {
+                    "limit": -1,
+                    "offset": 0,
+                    "location": "internal"
+                },
+                "root": "volumes",
+                "idProperty": "volume_path",
+                "fields": ["display_name", "volume_path"]
+            },
+            "validator": {
+                "fn": "{console.log(arguments);return true;}"
+            }
+        }]
+    }]
+}];
+EOF;
+?>
+EOF
+
+/usr/bin/php -n /tmp/wizard.php > $SYNOPKG_TEMP_LOGFILE
+rm /tmp/wizard.php
+exit 0

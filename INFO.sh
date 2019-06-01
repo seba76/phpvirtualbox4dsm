@@ -3,7 +3,7 @@
 [ -f /pkgscripts-ng/include/pkg_util.sh ] && . /pkgscripts-ng/include/pkg_util.sh 
 
 package="phpvirtualbox4dsm"
-version="5.2"
+version="6.0"
 displayname="phpVirtualBox"
 maintainer="seba"
 maintainer_url="http://github.com/seba76/"
@@ -18,11 +18,15 @@ install_dep_package="WebStation:PHP7.0"
 thirdparty="true"
 #support_conf_folder="yes"
 #install_reboot="yes"
-changelog="Version: 5.2"
+changelog="Version 6.0 - support for Virtualbox 6.0.x <br /> Version 5.2 Initial release"
 reloadui="no"
 startable="no"
-#dsmuidir="ui"
+#dsmuidir="ui" this one is for integrated ui
+#dsmappname="phpVirtualBox"
+adminprotocol="http"
 adminurl="/phpvirtualbox4dsm/"
+adminport="80"
+dsmuidir="app"
 arch="noarch"
 firmware="$1"
 [ "$(caller)" != "0 NULL" ] && return 0

@@ -1,0 +1,15 @@
+{
+  ".url": {
+    "phpvirtualbox4dsm": {
+      "allUsers": true,
+      "title": "phpVirtualBox",
+      "desc": "",
+      "icon": "images/Virtualbox_{0}.png",
+      "type": "url",
+      "protocol" : "https",
+      "port": "443",
+      "url": "/phpvirtualbox4dsm/",
+      "appendSynoTokenInUrlTag": true
+    }
+  }
+}

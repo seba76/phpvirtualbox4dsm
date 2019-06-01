@@ -6,18 +6,11 @@ PACKAGE="phpvirtualbox4dsm"
 # some variables
 WEB_DIR="/var/services/web/"
 PACKAGE_DIR="/var/packages/${PACKAGE}"
+CONFIG="${PACKAGE_DIR}/target/.config"
 VBOX_USER=root
 USER=${USER}
 
 # wizard variables
-PHPVBOX_NOAUTH=$([ "${wizard_no_auth}" == "true" ] && echo "true" || echo "false")
-PHPVBOX_ICONS=$([ "${wizard_enable_custom_icons}" == "true" ] && echo "true" || echo "false")
-PHPVBOX_ADVANCEDCONFIG=$([ "${wizard_enable_advanced_config}" == "true" ] && echo "true" || echo "false")
-PHPVBOX_STARTSTOPCONFIG=$([ "${wizard_start_stop_config}" == "true" ] && echo "true" || echo "false")
-PHPVBOX_LNG=$([ "${wizard_language_ger}" == "true" ] && echo "de" || echo "en")
-PHPVBOX_KBD=$([ "${wizard_keyboard_layout_ger}" == "true" ] && echo "DE" || echo "EN")
-WEBSVC_PASS="${wizard_use_vboxwebsvc_pass}"
-WEBSVC_URL="${wizard_vboxsvcdomain}"
 
 preinst ()
 {
@@ -26,7 +19,27 @@ preinst ()
 
 postinst ()
 {	
-	# Install the phpVirtualBox onto web station
+	# wizard config
+	PHPVBOX_NOAUTH=$([ "${wizard_no_auth}" == "true" ] && echo "true" || echo "false")
+	PHPVBOX_ICONS=$([ "${wizard_enable_custom_icons}" == "true" ] && echo "true" || echo "false")
+	PHPVBOX_ADVANCEDCONFIG=$([ "${wizard_enable_advanced_config}" == "true" ] && echo "true" || echo "false")
+	PHPVBOX_STARTSTOPCONFIG=$([ "${wizard_start_stop_config}" == "true" ] && echo "true" || echo "false")
+	PHPVBOX_LNG=$([ "${wizard_language_ger}" == "true" ] && echo "de" || echo "en")
+	PHPVBOX_KBD=$([ "${wizard_keyboard_layout_ger}" == "true" ] && echo "DE" || echo "EN")
+	WEBSVC_PASS="${wizard_use_vboxwebsvc_pass}"
+	WEBSVC_URL="${wizard_vboxsvcdomain}"
+
+	# save config
+	touch ${CONFIG}
+	set_key_value ${CONFIG} wizard_no_auth ${wizard_no_auth}
+	set_key_value ${CONFIG} wizard_enable_custom_icons ${wizard_enable_custom_icons}
+	set_key_value ${CONFIG} wizard_enable_advanced_config ${wizard_enable_advanced_config}
+	set_key_value ${CONFIG} wizard_start_stop_config ${wizard_start_stop_config}
+	set_key_value ${CONFIG} wizard_language_ger ${wizard_language_ger}
+	set_key_value ${CONFIG} wizard_keyboard_layout_ger ${wizard_keyboard_layout_ger}
+	set_key_value ${CONFIG} wizard_vboxsvcdomain ${wizard_vboxsvcdomain}
+	
+	# Install the phpVirtualBox in web station
 	mkdir -p ${WEB_DIR}/${PACKAGE}
 	cp -pR ${PACKAGE_DIR}/target/www/phpvirtualbox4dsm ${WEB_DIR}/
 
@@ -67,6 +80,11 @@ postuninst ()
 
 preupgrade ()
 {
+	[ -d ${TMP_DIR}/${PACKAGE} ] && rm -fr ${TMP_DIR}/${PACKAGE}
+	mkdir -p ${TMP_DIR}/${PACKAGE}
+
+	[ -f ${CONFIG} ] && cp ${CONFIG} ${TMP_DIR}/${PACKAGE}/
+	
 	exit 0
 }
 
@@ -75,6 +93,7 @@ postupgrade ()
    	exit 0
 }
 
+# get_key_value is in bin dir i.e. "get_key_value xfile key"
 set_key_value() {
 	xfile="$1"
 	param="$2"
