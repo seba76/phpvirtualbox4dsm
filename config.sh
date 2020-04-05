@@ -1,6 +1,6 @@
 #!/bin/sh
 PhpVirtualBoxUrl=https://github.com/phpvirtualbox/phpvirtualbox/archive/develop.zip
-PhpVirtualBoxVersion=6.0
+PhpVirtualBoxVersion=6.1
 
 # If files don't exist they need to be downloaded
 PhpVirtualBoxFile=phpVirtualBox.zip

@@ -3,7 +3,7 @@
 [ -f /pkgscripts-ng/include/pkg_util.sh ] && . /pkgscripts-ng/include/pkg_util.sh 
 
 package="phpvirtualbox4dsm"
-version="6.0"
+version="6.1"
 displayname="phpVirtualBox"
 maintainer="seba"
 maintainer_url="http://github.com/seba76/"
