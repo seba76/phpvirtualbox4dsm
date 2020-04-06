@@ -3,21 +3,34 @@
 /bin/cat > /tmp/wizard.php <<'EOF'
 <?php
 $ini_array = parse_ini_file("/var/packages/phpvirtualbox4dsm/target/.config");
+
+# page1 
 $wizard_no_auth=$ini_array["wizard_no_auth"];
 $wizard_enable_advanced_config=$ini_array["wizard_enable_advanced_config"];
 $wizard_start_stop_config=$ini_array["wizard_start_stop_config"];
 $wizard_enable_custom_icons=$ini_array["wizard_enable_custom_icons"];
+
+# page2
 $wizard_vboxsvcdomain=$ini_array["wizard_vboxsvcdomain"];
+
+# page3
 $wizard_language_en=$ini_array["wizard_language_en"];
 $wizard_language_ger=$ini_array["wizard_language_ger"];
 $wizard_keyboard_layout_en=$ini_array["wizard_keyboard_layout_en"];
 $wizard_keyboard_layout_ger=$ini_array["wizard_keyboard_layout_ger"];
 
+# page1 defaults
+if (empty($wizard_no_auth)) $wizard_no_auth = "false";
+if (empty($wizard_enable_advanced_config)) $wizard_enable_advanced_config = "false";
+if (empty($wizard_start_stop_config)) $wizard_start_stop_config = "false";
+if (empty($wizard_enable_custom_icons)) $wizard_enable_custom_icons = "false";
+
+# page2 defaults
 if (empty($wizard_vboxsvcdomain)) $wizard_vboxsvcdomain = "http://127.0.0.1:18083";
 
+# page3 defaults
 if (empty($wizard_language_en) || $wizard_language_ger == "en") $wizard_language_en = "true";
 if (empty($wizard_keyboard_layout_en) || $wizard_keyboard_layout_ger == "EN") $wizard_keyboard_layout_en = "true";
-
 if (empty($wizard_language_ger) || $wizard_language_ger == "en") $wizard_language_ger = "false";
 if (empty($wizard_keyboard_layout_ger) || $wizard_keyboard_layout_ger == "EN") $wizard_keyboard_layout_ger = "false";
 
