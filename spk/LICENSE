@@ -12,5 +12,6 @@ Enable SOAP extensions in default PHP configuration
 
 CHANGELOG 
 ===== 
+Version 6.1 - Updated phpVirtualbox to latest version which supports Virtualbox 6.1
 Version 6.0 - Created from development branch to support Virtualbox 6.0
 Version 5.2 - Initial release

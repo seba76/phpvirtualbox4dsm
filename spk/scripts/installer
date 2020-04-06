@@ -32,12 +32,14 @@ postinst ()
 	# save config
 	touch ${CONFIG}
 	set_key_value ${CONFIG} wizard_no_auth ${wizard_no_auth}
-	set_key_value ${CONFIG} wizard_enable_custom_icons ${wizard_enable_custom_icons}
 	set_key_value ${CONFIG} wizard_enable_advanced_config ${wizard_enable_advanced_config}
 	set_key_value ${CONFIG} wizard_start_stop_config ${wizard_start_stop_config}
-	set_key_value ${CONFIG} wizard_language_ger ${wizard_language_ger}
-	set_key_value ${CONFIG} wizard_keyboard_layout_ger ${wizard_keyboard_layout_ger}
+	set_key_value ${CONFIG} wizard_enable_custom_icons ${wizard_enable_custom_icons}
 	set_key_value ${CONFIG} wizard_vboxsvcdomain ${wizard_vboxsvcdomain}
+	set_key_value ${CONFIG} wizard_language_en ${wizard_language_en}
+	set_key_value ${CONFIG} wizard_language_ger ${wizard_language_ger}
+	set_key_value ${CONFIG} wizard_keyboard_layout_en ${wizard_keyboard_layout_en}
+	set_key_value ${CONFIG} wizard_keyboard_layout_ger ${wizard_keyboard_layout_ger}
 	
 	# Install the phpVirtualBox in web station
 	mkdir -p ${WEB_DIR}/${PACKAGE}
@@ -83,7 +85,9 @@ preupgrade ()
 	[ -d ${TMP_DIR}/${PACKAGE} ] && rm -fr ${TMP_DIR}/${PACKAGE}
 	mkdir -p ${TMP_DIR}/${PACKAGE}
 
-	[ -f ${CONFIG} ] && cp ${CONFIG} ${TMP_DIR}/${PACKAGE}/
+	if [ -f ${CONFIG} ]; then
+		cp ${CONFIG} ${TMP_DIR}/${PACKAGE}/
+	fi
 	
 	exit 0
 }
