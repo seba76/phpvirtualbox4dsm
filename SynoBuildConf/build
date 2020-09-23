@@ -9,6 +9,6 @@ case ${MakeClean} in
 esac
 
 # url links and file names
-. ./.config
+. ./build.config
 
 touch  /logs/phpvirtualbox.build

@@ -1,11 +1,17 @@
 #!/bin/sh
 PhpVirtualBoxUrl=https://github.com/phpvirtualbox/phpvirtualbox/archive/develop.zip
+PhpVirtualBoxGitRepoUrl=https://github.com/phpvirtualbox/phpvirtualbox.git
 PhpVirtualBoxVersion=6.1
+PhpVirtualBoxVersionCommitHash=0000000
 
 # If files don't exist they need to be downloaded
 PhpVirtualBoxFile=phpVirtualBox.zip
 PackageRoot=./package/www
 Destination=${PackageRoot}/phpvirtualbox4dsm
+
+DSM_PLAT=bromolow 
+
+[ -f ./build.config ] && . ./build.config
 
 WGET=$(which wget)
 UNZIP=$(which unzip)
@@ -24,6 +30,7 @@ function download_phpvbox()
 	echo "Downloading ${PhpVirtualBoxFile}"
 	$WGET ${PhpVirtualBoxUrl} -O ${PhpVirtualBoxFile}
 	rm -rf ${Destination}
+	PhpVirtualBoxVersionCommitHash=$(git ls-remote ${PhpVirtualBoxGitRepoUrl} HEAD | awk '{ print substr($1,1,7) }')
   fi
 }
 
@@ -49,14 +56,15 @@ function generate_config()
 	#sed -i -e "s|^header('Content-type', 'application/json');|header('Content-type: application/json');|g" ${Destination}/endpoints/jqueryFileTree.php
   fi
 
-  echo "Generating .config"
-  echo "PhpVirtualBoxFile=${PhpVirtualBoxFile}" >> .config
+  echo "Generating build.config"
+  echo "PhpVirtualBoxFile=${PhpVirtualBoxFile}" > build.config
+  echo "PhpVirtualBoxVersionCommitHash=${PhpVirtualBoxVersionCommitHash}" >> build.config
 }
 
 function update_info
 {
   echo "Update version in INFO.sh"
-  sed -i -e "s|^version=.*|version=\"${PhpVirtualBoxVersion}\"|g" INFO.sh
+  sed -i -e "s|^version=.*|version=\"${PhpVirtualBoxVersion}-${PhpVirtualBoxVersionCommitHash}\"|g" INFO.sh
 }
 
 case $1 in
@@ -64,11 +72,12 @@ case $1 in
     download_phpvbox
     generate_config
     update_info
-  ;;
+	echo "Ready to exec:"
+	echo "         'sudo ../../pkgscripts-ng/PkgCreate.py --print-log -c -I -S -p ${DSM_PLAT} -v 6.2 -x0 -c phpvirtualbox4dsm'"   ;;
   clean)
     rm $PhpVirtualBoxFile
     rm -rf $Destination
-    rm .config
+    rm build.config
   ;;
   *)
     echo "Usage: ./config.sh prep|clean";
