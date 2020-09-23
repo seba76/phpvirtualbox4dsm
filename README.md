@@ -4,7 +4,7 @@ This is PhpVirtualbox package for Synology DSM it contains phpvirtualbox code fr
 # Installation
 
 Latest spk file can be found in [release](https://github.com/seba76/phpvirtualbox4dsm/releases). During installation you will be asked few questions. If all 
-goes well you will have PhpVirtualBox running in WebStation install under http(s)://your_diskstation_addrsss/phpvirtualbox4dsm/
+goes well you will have PhpVirtualBox running in WebStation install under http(s)://your_diskstation_address/phpvirtualbox4dsm/
 
 ## Requirements
 - This package is platform independent.
