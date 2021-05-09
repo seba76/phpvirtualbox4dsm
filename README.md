@@ -1,3 +1,6 @@
+[![Github All Releases](https://img.shields.io/github/downloads/seba76/phpvirtualbox4dsm/total.svg)](https://github.com/seba76/phpvirtualbox4dsm)
+[![Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/seba76/)
+___
 # phpvirtualbox4dsm
 This is PhpVirtualbox package for Synology DSM it contains phpvirtualbox code from [github](https://github.com/phpvirtualbox/phpvirtualbox). It can be used as standalone application but it is created for complementing [virtualbox4dsm](https://github.com/seba76/virtualbox4dsm/releases) package.
 
@@ -14,5 +17,4 @@ goes well you will have PhpVirtualBox running in WebStation install under http(s
 ## Contributing
 
 If you find this project useful you can mark it by leaving a Github *Star*.</br>
-If you like what I'we done and would like to support this Project consider making a Donation:<br>
-[![Donate](https://img.shields.io/badge/donate-PayPal-yellow.svg)](https://paypal.me/seba76/)
+In case you have a problem installing open an issue with info about version of DSM and HW model you are using with erorr messages if any.
